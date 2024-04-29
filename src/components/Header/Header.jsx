@@ -11,7 +11,7 @@ const navLinks = [
   },
   {
     path: '/doctors',
-    display:'Encontre um médico'
+    display:'Encontre um profissional'
   },
   {
     path: '/services',
