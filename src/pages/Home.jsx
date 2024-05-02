@@ -15,6 +15,8 @@ import About from '../components/About/About'
 import ServiceList from '../components/Services/ServiceList'
 import DoctorList from '../components/Doctors/DoctorList'
 import FaqList from '../components/Faq/FaqList'
+import Testimonial from '../components/Testimonial/Testimonial'
+
 
 const Home = () => {
   return (
@@ -246,6 +248,16 @@ const Home = () => {
       {/* ==== faq section end ==== */}
 
       {/* ==== testimonial ==== */}
+      <section>
+        <div className="container">
+          <div className='lg:w-[570px] mx-auto'>
+            <h2 className='heading text-center'>O que nosso clientes dizem</h2>
+            <p className='text__para text-center'>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+          </div>
+
+          <Testimonial />
+        </div>
+      </section>
       {/* ==== testimonial end ==== */}
     </>
   )
