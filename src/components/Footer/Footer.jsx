@@ -1,4 +1,3 @@
-// import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import { RiLinkedinFill } from 'react-icons/ri'
@@ -95,7 +94,7 @@ const Footer = () => {
 
           <div>
             <h2 className='text-[18px] leading-30px font-[700] mb-6 text-headingColor'>
-              Quick Links
+              Menu
             </h2>
             <ul>
               {quickLinks01.map((item, index) => (
@@ -113,7 +112,7 @@ const Footer = () => {
 
           <div>
             <h2 className='text-[18px] leading-30px font-[700] mb-6 text-headingColor'>
-              Eu quero:
+              Ir para
             </h2>
             <ul>
               {quickLinks02.map((item, index) => (
