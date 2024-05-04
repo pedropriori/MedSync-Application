@@ -21,7 +21,7 @@ export const doctors = [
     totalRating: 272,
     photo: doctorImg02,
     totalPatients: 1500,
-    hospital: "Mount Adora Hospital, Sylhet.",
+    hospital: "Hospital Santa Casa, CM-PR.",
   },
   {
     id: "03",
@@ -31,6 +31,6 @@ export const doctors = [
     totalRating: 272,
     photo: doctorImg03,
     totalPatients: 1500,
-    hospital: "Mount Adora Hospital, Sylhet.",
+    hospital: "Hospital Santa Casa, CM-PR.",
   },
 ];
