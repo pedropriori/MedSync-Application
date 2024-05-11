@@ -1,77 +1,75 @@
 /* eslint-disable react/prop-types */
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import uploadImageToCloudinary from '../../utils/uploadCloudinary'
-import { BASE_URL, token } from '../../../config'
-import { toast } from 'react-toastify'
-import HashLoader from 'react-spinners/HashLoader'
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import uploadImageToCloudinary from "../../utils/uploadCloudinary";
+import { BASE_URL, token } from "../../../config";
+import { toast } from "react-toastify";
+import HashLoader from "react-spinners/HashLoader";
 
-const Profile = ({ user }) => {
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [loading, setLoading] = useState(false)
+const Profile = ({user}) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    name:'',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
     photo: null,
-    gender: '',
-  })
+    gender: "",
+  });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFormData({
       name: user.name,
       email: user.email,
       photo: user.photo,
-      gender: user.gender 
+      gender: user.gender
     })
-  }, [user])
+  },[user])
 
-  const handleFileInputChange = async event => {
-    const file = event.target.files[0]
+  const handleFileInputChange = async (event) => {
+    const file = event.target.files[0];
 
-    const data = await uploadImageToCloudinary(file)
+    const data = await uploadImageToCloudinary(file);
 
-    setSelectedFile(data.url)
-    setFormData({ ...formData, photo:data.url })
-  }
+    setSelectedFile(data.url);
+    setFormData({ ...formData, photo: data.url });
+  };
 
-  const handleInputChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const submitHandler = async event => {
-    event.preventDefault()
-    setLoading(true)
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
     try {
-      const res = await fetch(`${BASE_URL}/user/${user._id}`, {
-        method:'put',
+      const res = await fetch(`${BASE_URL}/users/${user._id}`, {
+        method: "put",
         headers: {
-          'Content-Type':'application/json',
+          "Content-Type": "application/json",
           Authorization:`Bearer ${token}`
         },
-        body: JSON.stringify(formData)
-      })
-      console.log(formData)
-      const { message } = await res.json()
+        body: JSON.stringify(formData),
+      });
 
-      if(!res.ok) {
-        throw new Error(message)
+      const { message } = await res.json();
+
+      if (!res.ok) {
+        throw new Error(message);
       }
 
-      setLoading(false)
-      toast.success(message)
-      navigate('/users/profile/me')
-
+      setLoading(false);
+      toast.success(message);
+      navigate("/users/profile/me");
     } catch (err) {
-      toast.error(err.message)
-      setLoading(false)
+      toast.error(err.message);
+      setLoading(false);
     }
-  }
-
+  };
 
   return (
     <div className="mt-10">
@@ -112,6 +110,7 @@ const Profile = ({ user }) => {
             onChange={handleInputChange}
             className="w-full pr-4 px-1 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-primaryBgColor 
                             text-[18px] leading-7 text-headingColor placeholder:text-textColor cursor-pointer"
+            
           />
         </div>
 
@@ -158,7 +157,7 @@ const Profile = ({ user }) => {
               className="absolute top-0 left-0 w-full h-full flex items-center px-[0.75rem] py-[0.375rem] text-[15px] leading-6 overflow-hidden 
                     bg-[#0066ff46] text-headingColor font-semibold rounded-lg truncate cursor-pointer"
             >
-              {selectedFile ? selectedFile.name : "Escolher Foto"}
+              {selectedFile ? selectedFile.name : 'Escolher Foto'}
             </label>
           </div>
         </div>
@@ -169,12 +168,12 @@ const Profile = ({ user }) => {
             type="submit"
             className="w-full bg-primaryBgColor text-white text-[18px] leading-[30px] rounded-lg px-4 py-3"
           >
-            {loading ? <HashLoader size={35} color="#ffffff" /> : "Atualizar"}
+            {loading ? <HashLoader size={35} color="#ffffff" /> : "Salvar"}
           </button>
         </div>
       </form>
     </div>
   );
-}
+};
 
-export default Profile
+export default Profile;
