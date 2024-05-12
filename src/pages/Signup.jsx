@@ -27,13 +27,13 @@ const SignUp = () => {
   const handleFileInputChange = async event => {
     const file = event.target.files[0]
 
+    // claaudinary to upload images
     const data = await uploadImageToCloudinary(file)
 
     setPreviewURL(data.url)
     setSelectedFile(data.url)
     setFormData({ ...formData, photo:data.url })
 
-    // claaudinary to upload images
   }
 
   const handleInputChange = e => {
