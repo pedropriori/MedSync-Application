@@ -2,6 +2,7 @@
 import { toast } from "react-toastify";
 import { BASE_URL, token } from "../../../config";
 import convertTime from "../../utils/convertTime";
+import BookAppointment from "./BookAppointment";
 
 const SidePanel = ({ doctorId, ticketPrice, timeSlots }) => {
   const bookingHandler = async () => {
@@ -58,9 +59,10 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots }) => {
         </ul>
       </div>
 
-      <button onClick={bookingHandler} className="btn px-2 w-full rounded-md">
+      {/* <button onClick={bookingHandler} className="btn px-2 w-full rounded-md">
         Agendar Consulta
-      </button>
+      </button> */}
+      <BookAppointment doctorId={doctorId} />
     </div>
   );
 };
