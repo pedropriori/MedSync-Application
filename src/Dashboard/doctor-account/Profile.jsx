@@ -235,9 +235,9 @@ const Profile = ({ doctorData }) => {
                 className="form__input py-3.5"
               >
                 <option value="">Selecione</option>
-                <option value="male">Masculino</option>
-                <option value="female">Feminino</option>
-                <option value="others">Outros</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="outros">Outros</option>
               </select>
             </div>
             <div>
@@ -249,11 +249,12 @@ const Profile = ({ doctorData }) => {
                 className="form__input py-3.5"
               >
                 <option value="">Selecione</option>
-                <option value="cardiologist">Cardiologista</option>
-                <option value="dermatologist">Dermatologista</option>
-                <option value="endocrinologist">Endocrinologista</option>
-                <option value="psychologist">Psicólogo</option>
-                <option value="other">Outro</option>
+                <option value="Cardiologista">Cardiologista</option>
+                <option value="Dermatologista">Dermatologista</option>
+                <option value="Endocrinologista">Endocrinologista</option>
+                <option value="Psicólogo">Psicólogo</option>
+                <option value="Developer">Developer</option>
+                <option value="Outros">Outro</option>
               </select>
             </div>
 
@@ -426,13 +427,13 @@ const Profile = ({ doctorData }) => {
                         onChange={(e) => handleTimeSlotChange(e, index)}
                       >
                         <option value="">Selecione</option>
-                        <option value="sunday">Domingo</option>
-                        <option value="monday">Segunda-Feira</option>
-                        <option value="tuesday">Terça-Feira</option>
-                        <option value="wednesday">Quarta-Feira</option>
-                        <option value="thursday">Quinta-Feira</option>
-                        <option value="friday">Sexta-Feira</option>
-                        <option value="saturday">Sábado</option>
+                        <option value="Domingo">Domingo</option>
+                        <option value="Segunda-Feira">Segunda-Feira</option>
+                        <option value="Terça-Feira">Terça-Feira</option>
+                        <option value="Quarta-Feira">Quarta-Feira</option>
+                        <option value="Quinta-Feira">Quinta-Feira</option>
+                        <option value="Sexta-Feira">Sexta-Feira</option>
+                        <option value="Sábado">Sábado</option>
                       </select>
                     </div>
                     <div>
