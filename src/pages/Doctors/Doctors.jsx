@@ -1,5 +1,4 @@
 import DoctorCard from "../../components/Doctors/DoctorCard";
-import { doctors } from "../../assets/data/doctors";
 import Testimonial from "../../components/Testimonial/Testimonial";
 import { BASE_URL } from "../../../config";
 import useFetchData from "./../../hooks/useFetchData";

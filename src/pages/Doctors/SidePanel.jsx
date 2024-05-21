@@ -1,35 +1,35 @@
 /* eslint-disable react/prop-types */
-import { toast } from "react-toastify";
-import { BASE_URL, token } from "../../../config";
+// import { toast } from "react-toastify";
+// import { BASE_URL, token } from "../../../config";
 import convertTime from "../../utils/convertTime";
 import BookAppointment from "./BookAppointment";
 
 const SidePanel = ({ doctorId, ticketPrice, timeSlots }) => {
-  const bookingHandler = async () => {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/bookings/checkout-session/${doctorId}`,
-        {
-          method: "post",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  // const bookingHandler = async () => {
+  //   try {
+  //     const res = await fetch(
+  //       `${BASE_URL}/bookings/checkout-session/${doctorId}`,
+  //       {
+  //         method: "post",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message + "Por favor, tente novamente");
-      }
+  //     if (!res.ok) {
+  //       throw new Error(data.message + "Por favor, tente novamente");
+  //     }
 
-      if (data.session.url) {
-        window.location.href = data.session.url;
-      }
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
+  //     if (data.session.url) {
+  //       window.location.href = data.session.url;
+  //     }
+  //   } catch (err) {
+  //     toast.error(err.message);
+  //   }
+  // };
 
   return (
     <div className="shadow-panelShadow p-3 lg:p-5 rounded-md">
