@@ -8,14 +8,23 @@ const uploadImageToCloudinary = async file => {
   uploadData.append('upload_preset', upload_preset)
   uploadData.append('cloud_name', cloud_name)
 
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
-    method:'post',
-    body:uploadData
-  })
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+      method: 'post',
+      body: uploadData
+    })
 
-  const data = await res.json()
+    if (!res.ok) {
+      throw new Error(`Failed to upload image: ${res.statusText}`);
+    }
 
-  return data
+    const data = await res.json()
+    return data
+
+  } catch (err) {
+    console.error('Error uploading image to Cloudinary:', err);
+    throw err;
+  }
 }
 
 export default uploadImageToCloudinary
