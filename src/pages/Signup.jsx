@@ -6,6 +6,7 @@ import uploadImageToCloudinary from "../utils/uploadCloudinary";
 import { BASE_URL } from "../../config";
 import { toast } from "react-toastify";
 import HashLoader from "react-spinners/HashLoader";
+import Pica from "pica";
 
 const SignUp = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -22,16 +23,56 @@ const SignUp = () => {
   });
 
   const navigate = useNavigate();
+  const pica = Pica();
+
+  // const handleFileInputChange = async (event) => {
+  //   const file = event.target.files[0];
+
+  //   // claaudinary to upload images
+  //   const data = await uploadImageToCloudinary(file);
+
+  //   setPreviewURL(data.url);
+  //   setSelectedFile(data.url);
+  //   setFormData({ ...formData, photo: data.url });
+  // };
 
   const handleFileInputChange = async (event) => {
     const file = event.target.files[0];
 
-    // claaudinary to upload images
-    const data = await uploadImageToCloudinary(file);
+    // Redimensiona a imagem para 640x640 pixels usando a biblioteca Pica
+    const resizeImage = async (file) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
 
-    setPreviewURL(data.url);
-    setSelectedFile(data.url);
-    setFormData({ ...formData, photo: data.url });
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 640;
+      canvas.height = 640;
+
+      await pica.resize(img, canvas);
+      const blob = await pica.toBlob(canvas, "image/jpeg", 0.9);
+
+      return new File([blob], file.name, {
+        type: "image/jpeg",
+        lastModified: Date.now(),
+      });
+    };
+
+    try {
+      const resizedFile = await resizeImage(file);
+
+      // Função para fazer o upload da imagem redimensionada para o Cloudinary
+      const data = await uploadImageToCloudinary(resizedFile);
+
+      setPreviewURL(data.url);
+      setSelectedFile(data.url);
+      setFormData({ ...formData, photo: data.url });
+    } catch (error) {
+      console.error("Error resizing or uploading the image:", error);
+    }
   };
 
   const handleInputChange = (e) => {

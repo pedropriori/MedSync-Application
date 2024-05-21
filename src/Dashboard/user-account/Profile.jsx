@@ -5,8 +5,9 @@ import uploadImageToCloudinary from "../../utils/uploadCloudinary";
 import { BASE_URL, token } from "../../../config";
 import { toast } from "react-toastify";
 import HashLoader from "react-spinners/HashLoader";
+import Pica from "pica";
 
-const Profile = ({user}) => {
+const Profile = ({ user }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,23 +20,62 @@ const Profile = ({user}) => {
   });
 
   const navigate = useNavigate();
+  const pica = Pica();
 
   useEffect(() => {
     setFormData({
       name: user.name,
       email: user.email,
       photo: user.photo,
-      gender: user.gender
-    })
-  },[user])
+      gender: user.gender,
+    });
+  }, [user]);
+
+  // const handleFileInputChange = async (event) => {
+  //   const file = event.target.files[0];
+
+  //   const data = await uploadImageToCloudinary(file);
+
+  //   setSelectedFile(data.url);
+  //   setFormData({ ...formData, photo: data.url });
+  // };
 
   const handleFileInputChange = async (event) => {
     const file = event.target.files[0];
 
-    const data = await uploadImageToCloudinary(file);
+    // Redimensiona a imagem para 640x640 pixels usando a biblioteca Pica
+    const resizeImage = async (file) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
 
-    setSelectedFile(data.url);
-    setFormData({ ...formData, photo: data.url });
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 640;
+      canvas.height = 640;
+
+      await pica.resize(img, canvas);
+      const blob = await pica.toBlob(canvas, "image/jpeg", 0.9);
+
+      return new File([blob], file.name, {
+        type: "image/jpeg",
+        lastModified: Date.now(),
+      });
+    };
+
+    try {
+      const resizedFile = await resizeImage(file);
+
+      // Função para fazer o upload da imagem redimensionada para o Cloudinary
+      const data = await uploadImageToCloudinary(resizedFile);
+
+      setSelectedFile(data.url);
+      setFormData({ ...formData, photo: data.url });
+    } catch (error) {
+      console.error("Error resizing or uploading the image:", error);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -51,7 +91,7 @@ const Profile = ({user}) => {
         method: "put",
         headers: {
           "Content-Type": "application/json",
-          Authorization:`Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
@@ -110,7 +150,6 @@ const Profile = ({user}) => {
             onChange={handleInputChange}
             className="w-full pr-4 px-1 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-primaryBgColor 
                             text-[18px] leading-7 text-headingColor placeholder:text-textColor cursor-pointer"
-            
           />
         </div>
 
@@ -157,7 +196,7 @@ const Profile = ({user}) => {
               className="absolute top-0 left-0 w-full h-full flex items-center px-[0.75rem] py-[0.375rem] text-[15px] leading-6 overflow-hidden 
                     bg-[#0066ff46] text-headingColor font-semibold rounded-lg truncate cursor-pointer"
             >
-              {selectedFile ? selectedFile.name : 'Escolher Foto'}
+              {selectedFile ? selectedFile.name : "Escolher Foto"}
             </label>
           </div>
         </div>

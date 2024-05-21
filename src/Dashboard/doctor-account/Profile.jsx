@@ -4,6 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import uploadImageToCloudinary from "./../../utils/uploadCloudinary";
 import { BASE_URL, token } from "./../../../config";
 import { toast } from "react-toastify";
+import Pica from "pica";
 
 const Profile = ({ doctorData }) => {
   const [formData, setFormData] = useState({
@@ -39,15 +40,54 @@ const Profile = ({ doctorData }) => {
     });
   }, [doctorData]);
 
+  const pica = Pica();
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // const handleFileInputChange = async (event) => {
+  //   const file = event.target.files[0];
+  //   const data = await uploadImageToCloudinary(file);
+
+  //   setFormData({ ...formData, photo: data?.url });
+  // };
+
   const handleFileInputChange = async (event) => {
     const file = event.target.files[0];
-    const data = await uploadImageToCloudinary(file);
 
-    setFormData({ ...formData, photo: data?.url });
+    // Redimensiona a imagem para 640x640 pixels usando a biblioteca Pica
+    const resizeImage = async (file) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 640;
+      canvas.height = 640;
+
+      await pica.resize(img, canvas);
+      const blob = await pica.toBlob(canvas, "image/jpeg", 0.9);
+
+      return new File([blob], file.name, {
+        type: "image/jpeg",
+        lastModified: Date.now(),
+      });
+    };
+
+    try {
+      const resizedFile = await resizeImage(file);
+
+      // Função para fazer o upload da imagem redimensionada para o Cloudinary
+      const data = await uploadImageToCloudinary(resizedFile);
+
+      setFormData({ ...formData, photo: data?.url });
+    } catch (error) {
+      console.error("Error resizing or uploading the image:", error);
+    }
   };
 
   const updateProfileHandler = async (e) => {
