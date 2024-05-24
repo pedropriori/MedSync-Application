@@ -5,6 +5,10 @@ import uploadImageToCloudinary from "./../../utils/uploadCloudinary";
 import { BASE_URL, token } from "./../../../config";
 import { toast } from "react-toastify";
 import Pica from "pica";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ptBR } from "date-fns/locale";
+import moment from "moment/moment";
 
 const Profile = ({ doctorData }) => {
   const [formData, setFormData] = useState({
@@ -477,22 +481,15 @@ const Profile = ({ doctorData }) => {
                       </select>
                     </div>
                     <div>
-                      <p className="form__label">Hora de Início</p>
-                      <input
-                        type="time"
-                        name="startingTime"
-                        value={item.startingTime}
+                      <p className="form__label">Escolha seus horários</p>
+                      <DatePicker
+                        showTimeSelect
                         className="form__input"
-                        onChange={(e) => handleTimeSlotChange(e, index)}
-                      />
-                    </div>
-                    <div>
-                      <p className="form__label">Hora de Término</p>
-                      <input
-                        type="time"
-                        name="endingTime"
-                        value={item.endingTime}
-                        className="form__input"
+                        timeIntervals={30}
+                        locale={ptBR}
+                        minDate={moment().add(1, "day").startOf("day").toDate()}
+                        placeholderText="Escolher"
+                        value={item.dateTime}
                         onChange={(e) => handleTimeSlotChange(e, index)}
                       />
                     </div>
