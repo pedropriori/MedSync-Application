@@ -21,6 +21,9 @@ const Appointments = ({ appointments }) => {
           <th scope="col" className="px-6 py-3">
             Marcado em
           </th>
+          <th scope="col" className="px-6 py-3">
+            Para
+          </th>
         </tr>
       </thead>
 
@@ -61,7 +64,10 @@ const Appointments = ({ appointments }) => {
               )}
             </td>
             <td className="px-6 py-4">{item.ticketPrice}</td>
-            <td className="px-6 py-4">{formateDate(item.createdAt)}</td>
+            <td className="px-6 py-4 w-auto">{formateDate(item.createdAt)}</td>
+            <td className="px-6 py-4">
+              {formateDate(item.date)} as {item.time}
+            </td>
           </tr>
         ))}
       </tbody>
