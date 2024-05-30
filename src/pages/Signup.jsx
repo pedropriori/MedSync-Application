@@ -340,7 +340,7 @@ const SignUp = () => {
                         className="text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none cursor-pointer"
                       >
                         <option value="patient">Paciente</option>
-                        <option value="professional">Profissional</option>
+                        <option value="doctor">Profissional</option>
                       </Field>
                       <ErrorMessage
                         name="role"
