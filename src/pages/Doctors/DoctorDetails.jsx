@@ -33,6 +33,7 @@ const DoctorDetails = () => {
     specialization,
     ticketPrice,
     photo,
+    address,
   } = doctor;
 
   return (
@@ -68,6 +69,16 @@ const DoctorDetails = () => {
                   <p className="text__para text-[14px] leading-6 lg:max-w-[390px]">
                     {bio}
                   </p>
+                  <p className="text__para text-[16px] font-bold text-headingColor leading-6 lg:max-w-[390px] mb-2">
+                    Endereço de atendimento
+                  </p>
+                  <span className="text-[15px] font-semibold leading-6">
+                    {address?.logradouro}, {address?.numero}, {address?.bairro}
+                  </span>
+                  <br />
+                  <span className="text-[15px] font-semibold leading-6">
+                    {address?.cidade} - {address?.estado}
+                  </span>
                 </div>
               </div>
 

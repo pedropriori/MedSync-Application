@@ -4,8 +4,15 @@ import { BsArrowRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 const DoctorCard = ({ doctor }) => {
-  const { name, avgRating, totalRating, photo, specialization, experiences } =
-    doctor;
+  const {
+    name,
+    avgRating,
+    totalRating,
+    photo,
+    specialization,
+    experiences,
+    address,
+  } = doctor;
 
   return (
     <div className="p-3 lg:p-5">
@@ -41,7 +48,13 @@ const DoctorCard = ({ doctor }) => {
           <p className="text-[14px] leading-6 font-[400] text-textColor">
             Em{" "}
             <span className="font-bold">
-              {experiences && experiences[0]?.place}
+              {experiences && experiences[experiences.length - 1]?.place}
+            </span>
+          </p>
+          <p className="text-[14px] leading-6 font-[400] text-textColor">
+            Localicade{" "}
+            <span className="font-bold">
+              {address?.cidade} - {address?.estado}
             </span>
           </p>
         </div>
