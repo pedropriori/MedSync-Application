@@ -1,9 +1,52 @@
 /* eslint-disable react/prop-types */
+
+import { useState } from "react";
 import { formateDate } from "@/utils/formateDate";
 import { Button } from "@/components/ui/button";
+import { BASE_URL, token } from "./../../../config";
+import { toast } from "react-toastify";
 
 const BookingCard = ({ booking }) => {
   const { doctor, ticketPrice, date, time } = booking;
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const address = doctor.address
+    ? `${doctor.address.logradouro}, ${doctor.address.numero}, ${doctor.address.bairro}, ${doctor.address.cidade} - ${doctor.address.estado}`
+    : "Endereço Indisponível";
+
+  const handleCancelClick = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/bookings/bookings/${booking._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setShowConfirmation(false);
+        window.location.reload();
+        toast.success("Agendamento cancelado com sucesso.");
+      } else {
+        const data = await response.json();
+        toast.error(`Erro ao cancelar agendamento: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Error cancelling booking:", error);
+      toast.error("Erro ao cancelar agendamento.");
+    }
+  };
+
+  const handleCancelConfirmation = () => {
+    setShowConfirmation(false);
+  };
 
   return (
     <div className="p-3 lg:p-5 mt-5 border">
@@ -31,7 +74,7 @@ const BookingCard = ({ booking }) => {
       <div className="mt-[18px] lg:mt-5 flex items-center justify-between">
         <div>
           <p className="text-[14px] leading-6 font-[500] text-textColor">
-            Em <span className="font-bold">*Address*</span>
+            Em <span className="font-bold">{address}</span>
           </p>
           <p className="text-[14px] leading-6 font-bold text-irisBlueColor">
             <span className="text-textColor font-[500]">Marcado para</span>{" "}
@@ -43,13 +86,40 @@ const BookingCard = ({ booking }) => {
       </div>
 
       <div className="">
-        <Button
-          type="button"
-          variant="outline"
-          className="text-red-500 border-red-500 w-full mt-4 p-3 text-[16px] leading-7 hover:bg-red-600 hover:text-white"
-        >
-          Cancelar
-        </Button>
+        {showConfirmation ? (
+          <div className="mt-4">
+            <p className="text-red-500 font-bold">
+              Tem certeza que deseja cancelar o agendamento?
+            </p>
+            <div className="flex justify-between mt-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="text-green-500 border-green-500 w-full mr-2 p-3 text-[16px] leading-7 hover:bg-green-600 hover:text-white"
+                onClick={handleConfirmCancel}
+              >
+                Confirmar
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="text-gray-500 border-gray-500 w-full p-3 text-[16px] leading-7 hover:bg-gray-600 hover:text-white"
+                onClick={handleCancelConfirmation}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <Button
+            type="button"
+            variant="outline"
+            className="text-red-500 border-red-500 w-full mt-4 p-3 text-[16px] leading-7 hover:bg-red-600 hover:text-white"
+            onClick={handleCancelClick}
+          >
+            Cancelar
+          </Button>
+        )}
       </div>
     </div>
   );
