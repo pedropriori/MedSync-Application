@@ -1,16 +1,40 @@
-import { useContext } from "react";
+/* eslint-disable react/prop-types */
+import { useContext, useState } from "react";
 import { BiMenu } from "react-icons/bi";
 import { authContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../../config";
 
-// eslint-disable-next-line react/prop-types
 const Tabs = ({ tab, setTab }) => {
   const { dispatch } = useContext(authContext);
+  const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
     navigate("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${BASE_URL}/doctors/me`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete account");
+      }
+
+      dispatch({ type: "LOGOUT" });
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("Ocorreu um erro ao excluir a conta. Tente novamente mais tarde.");
+    }
   };
 
   return (
@@ -59,11 +83,38 @@ const Tabs = ({ tab, setTab }) => {
           >
             Logout
           </button>
-          <button className="w-full bg-red-600 mt-4 p-3 text-[16px] leading-7 rounded-md text-white">
+          <button
+            className="w-full bg-red-600 mt-4 p-3 text-[16px] leading-7 rounded-md text-white"
+            onClick={() => setShowConfirm(true)}
+          >
             Excluir conta
           </button>
         </div>
       </div>
+
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-5 rounded-md">
+            <h2 className="text-lg font-semibold mb-4">
+              Tem certeza que deseja excluir sua conta?
+            </h2>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 p-2 rounded-md mr-4"
+                onClick={() => setShowConfirm(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="bg-red-600 text-white p-2 rounded-md"
+                onClick={handleDeleteAccount}
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
