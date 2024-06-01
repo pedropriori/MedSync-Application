@@ -15,7 +15,12 @@ const validationSchema = Yup.object({
     .min(5, "Insira um nome válido")
     .required("Nome é obrigatório"),
   email: Yup.string().email("Email inválido").required("Email é obrigatório"),
-  password: Yup.string().required("Senha é obrigatória"),
+  password: Yup.string()
+    .min(5, "A senha deve conter no mínimo 5 caracteres")
+    .required("Senha é obrigatória"),
+  confirmedPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "As senhas não coincidem")
+    .required("Confirmação de senha é obrigatória"),
   address: Yup.object({
     cep: Yup.string().trim().required("CEP é obrigatório").max(9),
     logradouro: Yup.string().required("Logradouro é obrigatório"),
@@ -40,6 +45,7 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
+    confirmedPassword: "",
     photo: selectedFile,
     gender: "",
     role: "patient",
@@ -93,13 +99,15 @@ const SignUp = () => {
   const submitHandler = async (values, { setSubmitting }) => {
     setLoading(true);
 
+    const { confirmedPassword, ...filteredValues } = values;
+
     try {
       const res = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(filteredValues),
       });
 
       const { message } = await res.json();
@@ -109,7 +117,7 @@ const SignUp = () => {
       }
 
       setLoading(false);
-      toast.success(message);
+      toast.success("Usuário criado sucesso");
       navigate("/login");
     } catch (err) {
       toast.error(err.message);
@@ -205,6 +213,20 @@ const SignUp = () => {
                     />
                     <ErrorMessage
                       name="password"
+                      component="div"
+                      className="text-red-600"
+                    />
+                  </div>
+
+                  <div className="mb-6">
+                    <Field
+                      type="password"
+                      name="confirmedPassword"
+                      placeholder="Confirme sua senha"
+                      className="w-full pr-4 px-2 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-primaryBgColor text-[17.5px] leading-7 text-headingColor placeholder:text-textColor placeholder:text-[16px] cursor-pointer"
+                    />
+                    <ErrorMessage
+                      name="confirmedPassword"
                       component="div"
                       className="text-red-600"
                     />
