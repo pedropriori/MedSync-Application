@@ -19,6 +19,7 @@ const Profile = ({ doctorData }) => {
     ticketPrice: doctorData?.ticketPrice || "",
     about: doctorData?.about || "",
     bio: doctorData?.bio || "",
+    isAvailableForTelemedicine: doctorData?.isAvailableForTelemedicine || false,
     qualifications: doctorData?.qualifications?.map((qualification) => ({
       startingDate: qualification.startingDate || "",
       endingDate: qualification.endingDate || "",
@@ -87,8 +88,9 @@ const Profile = ({ doctorData }) => {
     bio: Yup.string().min(5).required("Biografia é obrigatória"),
     gender: Yup.string().required("Gênero é obrigatório"),
     specialization: Yup.string().required("Especialização é obrigatória"),
-    ticketPrice: Yup.string().min(20).required("Preço é obrigatório"),
+    ticketPrice: Yup.string().min(2).required("Preço é obrigatório"),
     about: Yup.string().required("Sobre é obrigatório"),
+    isAvailableForTelemedicine: Yup.boolean(),
     qualifications: Yup.array().of(
       Yup.object().shape({
         startingDate: Yup.date().required("Data de início é obrigatória"),
@@ -141,7 +143,7 @@ const Profile = ({ doctorData }) => {
           "content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(values, formattedValues),
+        body: JSON.stringify(formattedValues),
       });
 
       const result = await res.json();
@@ -242,7 +244,7 @@ const Profile = ({ doctorData }) => {
               />
             </div>
             <div className="mb-5">
-              <div className="grid grid-cols-3 gap-5 mb-[30px]">
+              <div className="grid grid-cols-4 gap-5 mb-[30px]">
                 <div>
                   <p className="form__label">Gênero*</p>
                   <Field
@@ -302,6 +304,23 @@ const Profile = ({ doctorData }) => {
                   />
                   <ErrorMessage
                     name="ticketPrice"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <p className="form__label">Telemedicina*</p>
+                  <Field
+                    as="select"
+                    name="isAvailableForTelemedicine"
+                    className="form__input py-3.5"
+                  >
+                    <option value="true">Sim</option>
+                    <option value="false">Não</option>
+                  </Field>
+                  <ErrorMessage
+                    name="isAvailableForTelemedicine"
                     component="div"
                     className="text-red-500"
                   />
