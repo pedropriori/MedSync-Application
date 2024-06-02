@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { Link } from "react-router-dom";
 import { formateDate } from "../../utils/formateDate";
 
 const Appointments = ({ appointments }) => {
@@ -22,7 +23,10 @@ const Appointments = ({ appointments }) => {
             Marcado em
           </th>
           <th scope="col" className="px-6 py-3">
-            Para
+            Horário
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Link consulta online
           </th>
         </tr>
       </thead>
@@ -66,7 +70,22 @@ const Appointments = ({ appointments }) => {
             <td className="px-6 py-4">{item.ticketPrice}</td>
             <td className="px-6 py-4 w-auto">{formateDate(item.createdAt)}</td>
             <td className="px-6 py-4">
-              {formateDate(item.date)} as {item.time}
+              {formateDate(item.date)} as {item.time} -{" "}
+              {item.isTelemedicine ? "Online" : "Presencial"}
+            </td>
+            <td className="px-6 py-4">
+              {item.isTelemedicine ? (
+                <Link
+                  className="text-primary"
+                  to={
+                    "https://us05web.zoom.us/meeting/schedule?amp_device_id=79a92275-0a5b-421a-a8a6-b0cbe0c7ba0a"
+                  }
+                >
+                  Consulta Online via Zoom
+                </Link>
+              ) : (
+                "Consulta Presencial"
+              )}
             </td>
           </tr>
         ))}
