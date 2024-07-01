@@ -17,7 +17,7 @@ Essa variável deve conter o endereço criado no Cloudinary para fazer o upload 
 1. Clone o repositório do frontend:
 
    ```sh
-   git clone https://github.com/pedropriori/medsync-frontend.git
+   git clone https://github.com/pedropriori/MedSync-Application.git
    ```
 
 2. Instale as dependências:
