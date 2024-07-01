@@ -13,10 +13,13 @@ import { cepMask } from "@/utils/CepMask";
 const validationSchema = Yup.object({
   name: Yup.string()
     .min(5, "Insira um nome válido")
+    .max(150, "O nome pode ter no máximo 150 caracteres")
+    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "O nome deve conter apenas letras")
     .required("Nome é obrigatório"),
   email: Yup.string().email("Email inválido").required("Email é obrigatório"),
   password: Yup.string()
     .min(5, "A senha deve conter no mínimo 5 caracteres")
+    .max(25, "A senha deve conter no máximo 25 caracteres")
     .required("Senha é obrigatória"),
   confirmedPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "As senhas não coincidem")
@@ -233,6 +236,9 @@ const SignUp = () => {
                   </div>
 
                   <div className="mb-6">
+                  <h2 className="text-center text-xl font-semibold mb-2 leading-7 text-headingColor">
+              Endereço
+            </h2>
                     <Field
                       type="text"
                       name="address.cep"

@@ -4,7 +4,13 @@
 import convertTime from "../../utils/convertTime";
 import BookAppointment from "./BookAppointment";
 
-const SidePanel = ({ doctorId, doctor, ticketPrice, timeSlots }) => {
+const SidePanel = ({
+  doctorId,
+  doctor,
+  ticketPrice,
+  // timeSlots,
+  // weekDayTimeSlots,
+}) => {
   // const bookingHandler = async () => {
   //   try {
   //     const res = await fetch(
@@ -30,6 +36,9 @@ const SidePanel = ({ doctorId, doctor, ticketPrice, timeSlots }) => {
   //     toast.error(err.message);
   //   }
   // };
+  const timeSlots = doctor?.timeSlots?.length
+    ? doctor.timeSlots
+    : doctor?.weekDayTimeSlots;
 
   return (
     <div className="shadow-panelShadow p-3 lg:p-5 rounded-md">
@@ -49,7 +58,7 @@ const SidePanel = ({ doctorId, doctor, ticketPrice, timeSlots }) => {
 
       <div className="mt-[30px]">
         <p className="text__para mt-0 font-semibold text-headingColor">
-          Horários Disponíveis:
+          Disponibilidade:
         </p>
         <ul className="mt-3">
           {timeSlots?.map((item, index) => (

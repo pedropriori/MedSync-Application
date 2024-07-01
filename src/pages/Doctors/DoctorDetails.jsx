@@ -25,6 +25,7 @@ const DoctorDetails = () => {
     qualifications,
     experiences,
     timeSlots,
+    weekDayTimeSlots,
     reviews,
     bio,
     about,
@@ -69,15 +70,19 @@ const DoctorDetails = () => {
                   <p className="text__para text-[14px] leading-6 lg:max-w-[390px]">
                     {bio}
                   </p>
-                  <p className="text__para text-[16px] font-bold text-headingColor leading-6 lg:max-w-[390px] mb-2">
+                  <p className="text__para text-[16px] font-bold text-irisBlueColor leading-6 lg:max-w-[390px] mb-2">
                     Endereço de atendimento
                   </p>
                   <span className="text-[15px] font-semibold leading-6">
-                    {address?.logradouro}, {address?.numero}, {address?.bairro}
+                    {address
+                      ? `${address?.logradouro}, ${address?.numero}, ${address?.bairro}`
+                      : "Endereço Indisponível"}
                   </span>
                   <br />
                   <span className="text-[15px] font-semibold leading-6">
-                    {address?.cidade} - {address?.estado}
+                    {address
+                      ? `${address?.cidade} - ${address?.estado}`
+                      : "Localidade Indisponível"}
                   </span>
                 </div>
               </div>
@@ -125,6 +130,7 @@ const DoctorDetails = () => {
                 doctor={doctor}
                 ticketPrice={ticketPrice}
                 timeSlots={timeSlots}
+                weekDayTimeSlots={weekDayTimeSlots}
               />
             </div>
           </div>

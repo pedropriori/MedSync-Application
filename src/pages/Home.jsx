@@ -8,7 +8,7 @@ import featureImg from "../assets/images/feature-img01.png";
 import faqImg from "../assets/images/faq-img.png";
 import videoIcon from "../assets/images/video-icon.png";
 import avatarIcon from "../assets/images/avatar-icon.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
 import About from "../components/About/About";
 import ServiceList from "../components/Services/ServiceList";
@@ -17,6 +17,12 @@ import FaqList from "../components/Faq/FaqList";
 import Testimonial from "../components/Testimonial/Testimonial";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleClickButton = () => {
+    navigate("/doctors");
+  };
+
   return (
     <>
       {/* ---- hero section ---- */}
@@ -28,17 +34,24 @@ const Home = () => {
             <div>
               <div className="lg:w-[570px]">
                 <h1 className="text-[36px] leading-[46px] text-headingColor font-[800] md:text-[60px] md:leading-[60px]">
-                  Ajudamos nossos pacientes a terem uma vida mais longa e
-                  saudável.
+                  Transformando Vidas, Cuidando de Você
                 </h1>
-                <p className="text__para">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eos,
-                  pariatur dolor excepturi nihil rerum esse vel doloremque
-                  perferendis ducimus ut animi? Earum dolore deserunt odio
-                  aperiam?
+                <p className="text__para text-[17px]">
+                  {/* Estamos empenhados em te ajudar a alcançar uma vida mais
+                  longa, saudável e feliz. Conectamos pacientes e profissionais
+                  de saúde em uma comunidade dedicada ao bem-estar, onde você
+                  pode encontrar apoio, informações e os melhores serviços de
+                  saúde para atender às suas necessidades. Junte-se a nós e
+                  comece sua jornada para uma vida plena hoje mesmo. */}
+                  Junte-se a nós para uma vida mais longa, saudável e feliz.
+                  Conectamos pacientes e profissionais de saúde em uma
+                  comunidade dedicada ao bem-estar. Junte-se a nós e comece sua
+                  jornada para uma vida plena hoje mesmo.
                 </p>
 
-                <button className="btn">Solicite uma consulta</button>
+                <button className="btn" onClick={handleClickButton}>
+                  Solicite uma consulta
+                </button>
               </div>
 
               {/* === hero counter === */}
@@ -178,8 +191,9 @@ const Home = () => {
           <div className="lg:w-[570px] mx-auto">
             <h2 className="heading text-center">Nossos Serviços</h2>
             <p className="text__para text-center">
-              It is a long established fact that a reader will be distracted by
-              the readable content of a page when looking at its layout.
+              Oferecemos todo o suporte para
+              que tenha uma das melhores experiências quando o assunto é saúde. {<br/>}
+              O que você precisa está aqui!
             </p>
           </div>
 
@@ -260,8 +274,9 @@ const Home = () => {
               Nossos excelentes profissionais
             </h2>
             <p className="text__para text-center">
-              It is a long established fact that a reader will be distracted by
-              the readable content of a page when looking at its layout.
+              Nossos profissionais recebem todo o apoio, suporte, informações e ferramentas
+              para que possam atuar com a maior eficiência possível, resolvendo todos os seus
+              problemas!
             </p>
           </div>
 
@@ -296,8 +311,8 @@ const Home = () => {
           <div className="lg:w-[570px] mx-auto">
             <h2 className="heading text-center">O que nosso clientes dizem</h2>
             <p className="text__para text-center">
-              It is a long established fact that a reader will be distracted by
-              the readable content of a page when looking at its layout.
+              Saiba o que dizem sobre nós e confira por si próprio nossas vantagens.
+              Venha fazer parte você também!
             </p>
           </div>
 

@@ -5,10 +5,9 @@ import { formateDate } from "@/utils/formateDate";
 import { Button } from "@/components/ui/button";
 import { BASE_URL, token } from "./../../../config";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 const BookingCard = ({ booking }) => {
-  const { doctor, ticketPrice, date, time, isTelemedicine } = booking;
+  const { doctor, ticketPrice, date, time, isTelemedicine, meetingLink } = booking;
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const address = doctor.address
@@ -75,14 +74,14 @@ const BookingCard = ({ booking }) => {
       <div className="mt-[18px] lg:mt-5 flex items-center justify-between">
         <div>
           {isTelemedicine ? (
-            <Link
-              className="text-[14px] leading-6 font-[500] text-primary"
-              to={
-                "https://us05web.zoom.us/meeting/schedule?amp_device_id=79a92275-0a5b-421a-a8a6-b0cbe0c7ba0a"
-              }
-            >
-              Consulta Online via Zoom
-            </Link>
+            <a
+            className="text-[14px] leading-6 font-[500] text-primary"
+            href={meetingLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Consulta Online via Zoom
+          </a>
           ) : (
             <p className="text-[14px] leading-6 font-[500] text-textColor">
               Consulta Presencial

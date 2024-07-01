@@ -13,6 +13,8 @@ import { cepMask } from "@/utils/CepMask";
 const validationSchema = Yup.object({
   name: Yup.string()
     .min(5, "Insira um nome válido")
+    .max(150, "O nome pode ter no máximo 150 caracteres")
+    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "O nome deve conter apenas letras")
     .required("Nome é obrigatório"),
   email: Yup.string().email("Email inválido").required("Email é obrigatório"),
   address: Yup.object({

@@ -4,9 +4,12 @@ import { BiMenu } from "react-icons/bi";
 import { authContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../config";
+import { toast } from "react-toastify";
+import useGetProfile from "../../hooks/useFetchData";
 
 const Tabs = ({ tab, setTab }) => {
   const { dispatch } = useContext(authContext);
+  const [showMenu, setShowMenu] = useState(false); // Estado para controlar a exibição do menu
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
 
@@ -15,10 +18,13 @@ const Tabs = ({ tab, setTab }) => {
     navigate("/");
   };
 
+  const { data } = useGetProfile(`${BASE_URL}/doctors/profile/me`);
+
   const handleDeleteAccount = async () => {
+    const doctorId = data._id;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${BASE_URL}/doctors/me`, {
+      const response = await fetch(`${BASE_URL}/doctors/${doctorId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -30,19 +36,30 @@ const Tabs = ({ tab, setTab }) => {
       }
 
       dispatch({ type: "LOGOUT" });
+      toast.success("Conta deletada com sucesso");
       navigate("/");
     } catch (error) {
       console.error("Error deleting account:", error);
-      alert("Ocorreu um erro ao excluir a conta. Tente novamente mais tarde.");
+      toast.error(
+        "Ocorreu um erro ao excluir a conta. Tente novamente mais tarde."
+      );
     }
   };
 
   return (
     <div>
-      <span className="lg:hidden">
+      <span className="lg:hidden" onClick={() => setShowMenu(!showMenu)}>
+        {" "}
+        {/* Adiciona um evento onClick para alternar a exibição do menu */}
         <BiMenu className="w-6 h-6 cursor-pointer" />
       </span>
-      <div className="hidden lg:flex flex-col p-[30px] bg-white shadow-panelShadow items-center h-max rounded-md">
+      <div
+        className={`lg:flex flex-col p-[30px] bg-white shadow-panelShadow items-center h-max rounded-md ${
+          showMenu ? "block" : "hidden"
+        }`}
+      >
+        {" "}
+        {/* Adiciona a classe 'block' ou 'hidden' com base no estado showMenu */}
         {/* Overview button */}
         <button
           onClick={() => setTab("overview")}
@@ -65,6 +82,17 @@ const Tabs = ({ tab, setTab }) => {
         >
           Consultas
         </button>
+        {/* Address Tab */}
+        <button
+          onClick={() => setTab("address")}
+          className={`${
+            tab === "address"
+              ? "bg-indigo-100 text-primaryBgColor"
+              : "bg-transparent text-headingColor"
+          } w-full btn mt-0 rounded-md`}
+        >
+          Endereço
+        </button>
         {/* Settings button */}
         <button
           onClick={() => setTab("settings")}
@@ -76,12 +104,23 @@ const Tabs = ({ tab, setTab }) => {
         >
           Perfil
         </button>
+        {/* Schudule Tab */}
+        <button
+          onClick={() => setTab("schudules")}
+          className={`${
+            tab === "schudules"
+              ? "bg-indigo-100 text-primaryBgColor"
+              : "bg-transparent text-headingColor"
+          } w-full btn mt-0 rounded-md`}
+        >
+          Agenda
+        </button>
         <div className="mt-[100px] w-full">
           <button
             className="w-full bg-[#181A1E] p-3 text-[16px] leading-7 rounded-md text-white"
             onClick={handleLogout}
           >
-            Logout
+            Sair
           </button>
           <button
             className="w-full bg-red-600 mt-4 p-3 text-[16px] leading-7 rounded-md text-white"

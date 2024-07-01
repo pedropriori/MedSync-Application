@@ -46,7 +46,7 @@ const Profile = ({ doctorData }) => {
         place: "",
       },
     ],
-    timeSlots: doctorData?.timeSlots?.map((timeSlot) => ({
+    weekDayTimeSlots: doctorData?.weekDayTimeSlots?.map((timeSlot) => ({
       day: timeSlot.day || "",
       startingTime: timeSlot.startingTime || "",
       endingTime: timeSlot.endingTime || "",
@@ -82,8 +82,15 @@ const Profile = ({ doctorData }) => {
     });
   };
 
+  const today = new Date();
+  const minDate = new Date(1900, 0, 1);
+
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Nome é obrigatório"),
+    name: Yup.string()
+      .min(5, "Insira um nome válido")
+      .max(150, "O nome pode ter no máximo 150 caracteres")
+      .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "O nome deve conter apenas letras")
+      .required("Nome é obrigatório"),
     phone: Yup.string().required("Telefone é obrigatório"),
     bio: Yup.string().min(5).required("Biografia é obrigatória"),
     gender: Yup.string().required("Gênero é obrigatório"),
@@ -93,25 +100,37 @@ const Profile = ({ doctorData }) => {
     isAvailableForTelemedicine: Yup.boolean(),
     qualifications: Yup.array().of(
       Yup.object().shape({
-        startingDate: Yup.date().required("Data de início é obrigatória"),
-        endingDate: Yup.date().required("Data de término é obrigatória"),
+        startingDate: Yup.date()
+          .min(minDate, "Data inválida")
+          .max(today, "Data inválida")
+          .required("Data de início é obrigatória"),
+        endingDate: Yup.date()
+          .min(Yup.ref('startingDate'), "A data de término deve ser posterior à data de início")
+          .max(new Date(2040, 0, 1), "A data de término deve ser real e não muito distante no futuro")
+          .required("Data de término é obrigatória"),
         degree: Yup.string().required("Graduação é obrigatória"),
         university: Yup.string().required("Universidade é obrigatória"),
       })
     ),
     experiences: Yup.array().of(
       Yup.object().shape({
-        startingDate: Yup.date().required("Data de início é obrigatória"),
-        endingDate: Yup.date().required("Data de término é obrigatória"),
+        startingDate: Yup.date()
+          .min(minDate, "Data inválida")
+          .max(today, "Data inválida")
+          .required("Data de início é obrigatória"),
+        endingDate: Yup.date()
+          .min(Yup.ref('startingDate'), "A data de término deve ser posterior à data de início")
+          .max(today, "A data de término não pode ser futura")
+          .required("Data de término é obrigatória"),
         position: Yup.string().required("Cargo é obrigatório"),
         place: Yup.string().required("Lugar é obrigatório"),
       })
     ),
-    timeSlots: Yup.array().of(
+    weekDayTimeSlots: Yup.array().of(
       Yup.object().shape({
-        day: Yup.string().required("Dia é obrigatório"),
-        startingTime: Yup.string().required("Hora de início é obrigatória"),
-        endingTime: Yup.string().required("Hora de término é obrigatória"),
+        day: Yup.string(),
+        startingTime: Yup.string(),
+        endingTime: Yup.string(),
       })
     ),
   });
@@ -513,18 +532,18 @@ const Profile = ({ doctorData }) => {
 
             <div className="mb-5">
               <p className="form__label">Horários Disponíveis*</p>
-              <FieldArray name="timeSlots">
+              <FieldArray name="weekDayTimeSlots">
                 {({ push, remove }) => (
                   <>
-                    {values.timeSlots.length > 0 &&
-                      values.timeSlots.map((timeSlot, index) => (
+                    {values.weekDayTimeSlots.length > 0 &&
+                      values.weekDayTimeSlots.map((timeSlot, index) => (
                         <div key={index} className="mb-4">
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                             <div>
                               <p className="form__label">Dia*</p>
                               <Field
                                 as="select"
-                                name={`timeSlots[${index}].day`}
+                                name={`weekDayTimeSlots[${index}].day`}
                                 className="form__input"
                               >
                                 <option value={null}>Dia</option>
@@ -543,7 +562,7 @@ const Profile = ({ doctorData }) => {
                                 <option value="Sábado">Sábado</option>
                               </Field>
                               <ErrorMessage
-                                name={`timeSlots[${index}].day`}
+                                name={`weekDayTimeSlots[${index}].day`}
                                 component="div"
                                 className="text-red-500"
                               />
@@ -552,11 +571,11 @@ const Profile = ({ doctorData }) => {
                               <p className="form__label">Hora de Início*</p>
                               <Field
                                 type="time"
-                                name={`timeSlots[${index}].startingTime`}
+                                name={`weekDayTimeSlots[${index}].startingTime`}
                                 className="form__input"
                               />
                               <ErrorMessage
-                                name={`timeSlots[${index}].startingTime`}
+                                name={`weekDayTimeSlots[${index}].startingTime`}
                                 component="div"
                                 className="text-red-500"
                               />
@@ -565,11 +584,11 @@ const Profile = ({ doctorData }) => {
                               <p className="form__label">Hora de Término*</p>
                               <Field
                                 type="time"
-                                name={`timeSlots[${index}].endingTime`}
+                                name={`weekDayTimeSlots[${index}].endingTime`}
                                 className="form__input"
                               />
                               <ErrorMessage
-                                name={`timeSlots[${index}].endingTime`}
+                                name={`weekDayTimeSlots[${index}].endingTime`}
                                 component="div"
                                 className="text-red-500"
                               />
