@@ -44,6 +44,10 @@ O frontend estará disponível em `http://localhost:5173`.
 - Cloudinary
 - Entre Outros
 
+## Observação
+
+O projeto pode não funcionar adequadamente é sistemas MacOS, sugiro que, por enquanto, seja executado em sistemas Windows ou Linux.
+
 ## Contribuição
 
 Sinta-se à vontade para fazer um fork do projeto, abrir issues e enviar pull requests.
