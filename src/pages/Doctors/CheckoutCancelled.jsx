@@ -1,26 +1,26 @@
 import { Link } from "react-router-dom";
 
-const CheckoutSuccess = () => {
+const CheckoutCancelled = () => {
   return (
     <div className="bg-gray-100 h-screen">
       <div className="bg-white p-6 md:mx-auto">
         <svg
           viewBox="0 0 24 24"
-          className="text-green-600 w-16 h-16 mx-auto my-6"
+          className="text-red-600 w-16 h-16 mx-auto my-6"
         >
           <path
             fill="currentColor"
-            d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
-          ></path>
+            d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm5.657 16.657a1 1 0 01-1.414 1.414L12 13.414l-4.243 4.243a1 1 0 01-1.414-1.414L10.586 12 6.343 7.757a1 1 0 011.414-1.414L12 10.586l4.243-4.243a1 1 0 011.414 1.414L13.414 12l4.243 4.243z"
+          />
         </svg>
         <div className="text-center">
           <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">
-            Pagamento Finalizado!
+            Pagamento Cancelado!
           </h3>
           <p className="text-gray-500 my-2">
-            Obrigado por concluir seu pagamento on-line seguro.
+            Você cancelou seu pagamento. Nenhuma cobrança foi realizada.
           </p>
-          <p> Tenha um ótimo dia! </p>
+          <p> Tente novamente mais tarde. </p>
           <div className="py-10 text-center">
             <Link
               to="/home"
@@ -35,4 +35,4 @@ const CheckoutSuccess = () => {
   );
 };
 
-export default CheckoutSuccess;
+export default CheckoutCancelled;

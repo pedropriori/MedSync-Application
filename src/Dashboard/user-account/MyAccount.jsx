@@ -20,6 +20,8 @@ const MyAccount = () => {
     error,
   } = useFetchData(`${BASE_URL}/users/profile/me`);
 
+  // console.log(userData, "userdata");
+
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
     navigate("/");
@@ -80,7 +82,7 @@ const MyAccount = () => {
                   className="w-full bg-[#181A1E] p-3 text-[16px] leading-7 rounded-md text-white"
                   onClick={handleLogout}
                 >
-                  Logout
+                  Sair
                 </button>
                 <button
                   className="w-full bg-red-600 mt-4 p-3 text-[16px] leading-7 rounded-md text-white"

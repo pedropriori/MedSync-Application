@@ -35,11 +35,11 @@ const Doctors = () => {
       <section className="bg-[#fff9ea]">
         <div className="container text-center">
           <h2 className="heading">Encontre um Profissional</h2>
-          <div className="max-w-[570px] mt-[30px] mx-auto bg-[#0066ff2c] rounded-md flex items-center justify-between">
+          <div className="max-w-[700px] mt-[30px] mx-auto bg-[#0066ff2c] rounded-md flex items-center justify-between">
             <input
               type="search"
               className="py-4 pl-4 pr-4 bg-transparent w-full focus:outline-none cursor-pointer placeholder:text-textColor"
-              placeholder="Pesquise profissionais por nome ou especialização"
+              placeholder="Pesquise profissionais por nome, especialização, cidade ou estado"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />

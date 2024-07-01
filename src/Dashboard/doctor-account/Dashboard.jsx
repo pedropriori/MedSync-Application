@@ -9,11 +9,14 @@ import DoctorAbout from "./../../pages/Doctors/DoctorAbout";
 import Profile from "./Profile";
 import avatar from "../../assets/images/doctor-img03.png";
 import Appointments from "./Appointments";
+import Address from "./Address";
+import Schudules from "./Schudules";
 
 const Dashboard = () => {
   const { data, loading, error } = useGetProfile(
     `${BASE_URL}/doctors/profile/me`
   );
+  // console.log(data);
 
   const [tab, setTab] = useState("overview");
 
@@ -108,9 +111,13 @@ const Dashboard = () => {
                 )}
 
                 {tab === "appointments" && (
-                  <Appointments appointments={data.appointments} />
+                  <div className="w-[570px] md:w-[770px]">
+                    <Appointments appointments={data.appointments} />
+                  </div>
                 )}
                 {tab === "settings" && <Profile doctorData={data} />}
+                {tab === "address" && <Address doctorData={data} />}
+                {tab === "schudules" && <Schudules />}
               </div>
             </div>
           </div>

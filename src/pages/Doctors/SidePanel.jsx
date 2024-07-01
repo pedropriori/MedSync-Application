@@ -4,7 +4,13 @@
 import convertTime from "../../utils/convertTime";
 import BookAppointment from "./BookAppointment";
 
-const SidePanel = ({ doctorId, ticketPrice, timeSlots }) => {
+const SidePanel = ({
+  doctorId,
+  doctor,
+  ticketPrice,
+  // timeSlots,
+  // weekDayTimeSlots,
+}) => {
   // const bookingHandler = async () => {
   //   try {
   //     const res = await fetch(
@@ -30,6 +36,9 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots }) => {
   //     toast.error(err.message);
   //   }
   // };
+  const timeSlots = doctor?.timeSlots?.length
+    ? doctor.timeSlots
+    : doctor?.weekDayTimeSlots;
 
   return (
     <div className="shadow-panelShadow p-3 lg:p-5 rounded-md">
@@ -40,9 +49,16 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots }) => {
         </span>
       </div>
 
+      <div className="flex items-center justify-between mt-2">
+        <p className="text__para mt-0 font-semibold">Atende Telemedicina</p>
+        <span className="text-[16px] leading-7 lg:text-[20px] lg:leading-8 text-headingColor font-bold">
+          {doctor?.isAvailableForTelemedicine ? "Sim" : "Não"}
+        </span>
+      </div>
+
       <div className="mt-[30px]">
         <p className="text__para mt-0 font-semibold text-headingColor">
-          Horários Disponíveis:
+          Disponibilidade:
         </p>
         <ul className="mt-3">
           {timeSlots?.map((item, index) => (
@@ -62,7 +78,7 @@ const SidePanel = ({ doctorId, ticketPrice, timeSlots }) => {
       {/* <button onClick={bookingHandler} className="btn px-2 w-full rounded-md">
         Agendar Consulta
       </button> */}
-      <BookAppointment doctorId={doctorId} />
+      <BookAppointment doctorId={doctorId} doctor={doctor} />
     </div>
   );
 };

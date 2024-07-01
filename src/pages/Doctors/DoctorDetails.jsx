@@ -25,6 +25,7 @@ const DoctorDetails = () => {
     qualifications,
     experiences,
     timeSlots,
+    weekDayTimeSlots,
     reviews,
     bio,
     about,
@@ -33,6 +34,7 @@ const DoctorDetails = () => {
     specialization,
     ticketPrice,
     photo,
+    address,
   } = doctor;
 
   return (
@@ -68,6 +70,20 @@ const DoctorDetails = () => {
                   <p className="text__para text-[14px] leading-6 lg:max-w-[390px]">
                     {bio}
                   </p>
+                  <p className="text__para text-[16px] font-bold text-irisBlueColor leading-6 lg:max-w-[390px] mb-2">
+                    Endereço de atendimento
+                  </p>
+                  <span className="text-[15px] font-semibold leading-6">
+                    {address
+                      ? `${address?.logradouro}, ${address?.numero}, ${address?.bairro}`
+                      : "Endereço Indisponível"}
+                  </span>
+                  <br />
+                  <span className="text-[15px] font-semibold leading-6">
+                    {address
+                      ? `${address?.cidade} - ${address?.estado}`
+                      : "Localidade Indisponível"}
+                  </span>
                 </div>
               </div>
 
@@ -111,8 +127,10 @@ const DoctorDetails = () => {
             <div>
               <SidePanel
                 doctorId={doctor._id}
+                doctor={doctor}
                 ticketPrice={ticketPrice}
                 timeSlots={timeSlots}
+                weekDayTimeSlots={weekDayTimeSlots}
               />
             </div>
           </div>

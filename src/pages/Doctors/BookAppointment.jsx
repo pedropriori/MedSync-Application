@@ -9,37 +9,68 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CalendarDays, Clock } from "lucide-react";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { BASE_URL, token } from "../../../config";
 import { ptBR } from "date-fns/locale";
+import { FaVideo, FaClinicMedical } from "react-icons/fa";
+import { authContext } from "./../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-const BookAppointment = ({ doctorId }) => {
+const BookAppointment = ({ doctorId, doctor }) => {
   const [date, setDate] = useState(new Date());
   const [timeSlot, setTimeSlot] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState();
+  const [appointmentType, setAppointmentType] = useState("Presencial");
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
+
+  const { user } = useContext(authContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTime();
-  }, []);
+  }, [date]);
 
-  const getTime = () => {
-    const timeList = [];
-    for (let i = 8; i <= 18; i++) {
-      const hour = i < 10 ? `0${i}` : i;
-      timeList.push({
-        time: `${hour}:00`,
-      });
-      if (i < 18) {
-        timeList.push({
-          time: `${hour}:30`,
-        });
-      }
+  // const getTime = () => {
+  //   const timeList = [];
+  //   for (let i = 8; i <= 18; i++) {
+  //     const hour = i < 10 ? `0${i}` : i;
+  //     timeList.push({
+  //       time: `${hour}:00`,
+  //     });
+  //     if (i < 18) {
+  //       timeList.push({
+  //         time: `${hour}:30`,
+  //       });
+  //     }
+  //   }
+  //   setTimeSlot(timeList);
+  // };
+
+  const getTime = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/doctors/${doctorId}/availableTimeSlots?date=${date.toISOString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      setAvailableTimeSlots(data.timeSlots);
+    } catch (error) {
+      console.error("Erro ao obter horários disponíveis:", error);
+      toast.error(
+        "Erro ao obter horários disponíveis. Por favor, tente novamente."
+      );
     }
-    setTimeSlot(timeList);
   };
 
   const isPastDay = (day) => {
@@ -48,6 +79,12 @@ const BookAppointment = ({ doctorId }) => {
 
   const bookingHandler = async () => {
     try {
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
+      const isTelemedicine = appointmentType === "Telemedicina" ? true : false;
       const res = await fetch(
         `${BASE_URL}/bookings/checkout-session/${doctorId}`,
         {
@@ -59,20 +96,26 @@ const BookAppointment = ({ doctorId }) => {
           body: JSON.stringify({
             date,
             time: selectedTimeSlot,
+            isTelemedicine,
           }),
         }
       );
+      console.log(res.body);
 
       const data = await res.json();
+
+      if (data.success) {
+        window.location.href = data.url; // Redirect to checkout Stripe Page
+      } else {
+        console.error("Failed to create checkout session", data.message);
+      }
 
       if (!res.ok) {
         throw new Error(data.message + " Por favor, tente novamente");
       }
-
-      if (data.session.url) {
-        window.location.href = data.session.url;
-      }
+  
     } catch (err) {
+      console.error("Erro no handler de agendamento:", err);
       toast.error(err.message);
     }
   };
@@ -87,7 +130,7 @@ const BookAppointment = ({ doctorId }) => {
           <DialogTitle>Agendar Consulta</DialogTitle>
           <DialogDescription>
             <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-5">
                 <div className="flex flex-col gap-3 items-baseline">
                   <h2 className="flex gap-3 items-center">
                     <CalendarDays className="text-primaryBgColor h-5 w-5" />
@@ -97,7 +140,7 @@ const BookAppointment = ({ doctorId }) => {
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="rounded-md border"
+                    className="rounded-md border w-full"
                     disabled={isPastDay}
                     locale={ptBR}
                   />
@@ -107,7 +150,7 @@ const BookAppointment = ({ doctorId }) => {
                     <Clock className="text-primaryBgColor h-5 w-5" />
                     Selecione o horário
                   </h2>
-                  <div className="grid grid-cols-4 gap-2 border rounded-lg p-5">
+                  {/* <div className="grid grid-cols-4 gap-2 border rounded-lg p-5">
                     {timeSlot?.map((item, index) => (
                       <h2
                         onClick={() => setSelectedTimeSlot(item.time)}
@@ -120,9 +163,67 @@ const BookAppointment = ({ doctorId }) => {
                         {item.time}
                       </h2>
                     ))}
-                  </div>
+                  </div> */}
+                  {availableTimeSlots.length > 0 ? (
+                    <div className="grid grid-cols-4 gap-2 border rounded-lg p-5">
+                      {availableTimeSlots?.map((time, index) => (
+                        <h2
+                          onClick={() => setSelectedTimeSlot(time)}
+                          key={index}
+                          className={`p-2 border rounded-full text-center hover:bg-primaryBgColor hover:text-white cursor-pointer ${
+                            time === selectedTimeSlot &&
+                            "bg-primaryBgColor text-white"
+                          }`}
+                        >
+                          {time}
+                        </h2>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>Nenhum horário disponível para esta data</p>
+                  )}
                 </div>
               </div>
+              {doctor && (
+                <div className="flex flex-col gap-3 mt-5">
+                  <h2 className="flex gap-3 items-center">Tipo de Consulta</h2>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      className={`p-2 border rounded-lg text-center cursor-pointer flex flex-col items-center justify-center ${
+                        appointmentType === "Telemedicina"
+                          ? "bg-primaryBgColor text-white"
+                          : ""
+                      } ${
+                        !doctor.isAvailableForTelemedicine &&
+                        "cursor-not-allowed opacity-50"
+                      }`}
+                      onClick={() =>
+                        doctor.isAvailableForTelemedicine &&
+                        setAppointmentType("Telemedicina")
+                      }
+                    >
+                      <FaVideo className="h-6 w-6" />
+                      Telemedicina
+                    </button>
+                    <button
+                      className={`p-2 border rounded-lg text-center cursor-pointer flex flex-col items-center justify-center ${
+                        appointmentType === "Presencial"
+                          ? "bg-primaryBgColor text-white"
+                          : ""
+                      }`}
+                      onClick={() => setAppointmentType("Presencial")}
+                    >
+                      <FaClinicMedical className="h-6 w-6" />
+                      Presencial
+                    </button>
+                  </div>
+                  {/* {appointmentType === "Telemedicina" && (
+                    <p className="text-red-500 pl-2">
+                      Funcionalidade em desenvolvimento!
+                    </p>
+                  )} */}
+                </div>
+              )}
             </div>
           </DialogDescription>
         </DialogHeader>

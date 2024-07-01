@@ -50,9 +50,10 @@ const Login = () => {
 
       console.log(result, "login data");
 
-      setLoading(false);
       toast.success(result.message);
-      navigate("/home");
+      navigate("/");
+      window.location.reload();
+      setLoading(false);
     } catch (err) {
       toast.error(err.message);
       setLoading(false);
@@ -99,9 +100,13 @@ const Login = () => {
               type="submit"
               className="w-full bg-primaryBgColor text-white text-[18px] leading-[30px] rounded-lg px-4 py-3"
             >
-              {loading ? <HashLoader size={25} color="#fff" /> : "Login"}
+              {loading ? <HashLoader size={25} color="#fff" /> : "Entrar"}
             </button>
           </div>
+
+          <p className="text-primaryBgColor text-[14px] ml-1 mt-2 text-center">
+            Esqueceu a senha?
+          </p>
 
           <p className="mt-5 text-textColor text-center">
             Não possui uma conta?{" "}
